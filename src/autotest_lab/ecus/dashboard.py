@@ -8,6 +8,10 @@ class DashboardECU:
     def process_message(self,message):
         if message.arbitration_id!=0x100:
             return False
+        if message.is_remote_frame:
+            return False
+        if message.is_error_frame:
+            return False
         if message.is_extended_id or len(message.data)!=2:
             return False
         rpm=int.from_bytes(
