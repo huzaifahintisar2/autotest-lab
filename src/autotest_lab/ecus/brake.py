@@ -1,4 +1,5 @@
 import can
+import math
 class BrakeECU:
     def __init__(self):
         self.pressure=0
@@ -6,8 +7,10 @@ class BrakeECU:
     def get_pressure(self):
         return self.pressure
     def update_pressure(self,pressure):
-        if not isinstance(pressure,(int,float)):
+        if isinstance(pressure,bool) or not isinstance(pressure,(int,float)):
             raise ValueError("Pressure must be a number")
+        if not math.isfinite(pressure):
+            raise ValueError("Pressure must be finite")
         if pressure<0 or pressure>100:
             raise ValueError("Pressure must be between 0 and 100")
         self.pressure=pressure

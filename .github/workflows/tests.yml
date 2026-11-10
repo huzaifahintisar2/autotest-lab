@@ -19,4 +19,4 @@ jobs:
         run: python -m pip install -e ".[dev]"
 
       - name: Run automated tests
-        run: python -m pytest -v
+        run: python -m pytest --cov=autotest_lab --cov-branch --cov-report=term-missing --cov-fail-under=90 -v
