@@ -1,8 +1,11 @@
 import pytest
 from autotest_lab.ecus.engine import EngineECU
+@pytest.fixture
+def engine():
+    return EngineECU()
 
-def test_engine_starts_at_zero():
-    engine=EngineECU()
+
+def test_engine_starts_at_zero(engine):
     assert engine.get_rpm()==0
 def test_engine_updates_rpm():
     engine=EngineECU()
@@ -27,7 +30,12 @@ def test_engine_create_can_message():
     engine=EngineECU()
     engine.update_rpm(3000)
     message=engine.create_rpm_message()
-
     assert message.arbitration_id==0x100
     assert message.is_extended_id==False
     assert message.data==bytes([0xB8, 0x0B])
+
+def test_engine_rejects_non_integer_rpm(engine):
+    engine.update_rpm(3000)
+    with pytest.raises(TypeError):
+        engine.update_rpm("high")
+    assert engine.get_rpm()==3000
